@@ -202,8 +202,19 @@ def put_thread(user_id: str, thread_id: str, *, assistant_id: str, name: str) ->
     return saved
 
 
+def delete_thread(user_id: str, thread_id: str) -> bool:
+    client = get_redis_client()
+    with client.pipeline() as pipe:
+        pipe.srem(threads_list_key(user_id), orjson.dumps(thread_id))
+        pipe.delete(thread_key(user_id, thread_id))
+        pipe.execute()
+
+    return True
+
+
 if __name__ == "__main__":
     print(list_assistants("133"))
     print(list_threads("123"))
     put_assistant("123", "i-am-a-test", name="Test Agent", config={"tags": ["hello"]})
-    put_thread("123", "i-am-a-test", "test1", name="Test Thread")
+    put_thread("123", "i-am-a-test", assistant_id="test1", name="Test Thread")
+    delete_thread("123", "i-am-a-test")

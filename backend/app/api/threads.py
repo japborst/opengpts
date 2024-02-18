@@ -91,3 +91,9 @@ def upsert_thread(
         assistant_id=thread_put_request.assistant_id,
         name=thread_put_request.name,
     )
+
+
+@router.delete("/{tid}")
+def delete_thread(opengpts_user_id: OpengptsUserId, tid: ThreadID):
+    """Delete a thread."""
+    return storage.delete_thread(opengpts_user_id, tid)

@@ -1,4 +1,4 @@
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import { ChatListProps } from "../hooks/useChatList";
 import { ConfigListProps } from "../hooks/useConfigList";
@@ -8,6 +8,7 @@ export function ChatList(props: {
   chats: ChatListProps["chats"];
   currentChat: ChatListProps["currentChat"];
   enterChat: ChatListProps["enterChat"];
+  removeChat: ChatListProps["removeChat"];
   currentConfig: ConfigListProps["currentConfig"];
   enterConfig: ConfigListProps["enterConfig"];
 }) {
@@ -83,6 +84,9 @@ export function ChatList(props: {
                 {chat.name?.[0] ?? " "}
               </span>
               <span className="truncate">{chat.name}</span>
+              <TrashIcon
+                className="hidden group-hover:block hover:text-red-600 h-5"
+                onClick={() => props.removeChat(chat.thread_id)}/>
             </div>
           </li>
         )) ?? (

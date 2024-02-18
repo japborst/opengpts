@@ -13,7 +13,7 @@ import { Config } from "./components/Config";
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { configSchema, configDefaults } = useSchemas();
-  const { chats, currentChat, createChat, enterChat } = useChatList();
+  const { chats, currentChat, createChat, enterChat, removeChat } = useChatList();
   const { configs, currentConfig, saveConfig, enterConfig, removeConfig } = useConfigList();
   const { startStream, stopStream, stream } = useStreamState();
 
@@ -135,6 +135,7 @@ function App() {
           }, [chats, configs])}
           currentChat={currentChat}
           enterChat={selectChat}
+          removeChat={removeChat}
           currentConfig={currentConfig}
           enterConfig={selectConfig}
         />

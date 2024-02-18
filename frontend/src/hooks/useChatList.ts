@@ -5,9 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 export interface Message {
   type: string;
   content:
-    | string
-    | { page_content: string; metadata: Record<string, object> }[]
-    | object;
+  | string
+  | { page_content: string; metadata: Record<string, object> }[]
+  | object;
   name?: string;
   additional_kwargs?: {
     name?: string;
@@ -41,6 +41,7 @@ export interface ChatListProps {
     thread_id?: string
   ) => Promise<Chat>;
   enterChat: (id: string | null) => void;
+  removeChat: (id: string) => void;
 }
 
 function chatsReducer(
@@ -100,10 +101,33 @@ export function useChatList(): ChatListProps {
     setCurrent(id);
   }, []);
 
+  const removeChat = useCallback(
+    async (thread_id: string) => {
+      await fetch(`/threads/${thread_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }).then((r) => r.json());
+      const newChats = chats.filter((c) => c.thread_id !== thread_id)
+      setChats(newChats);
+
+      // Upon setting chats, the view is reset.
+      // If deleting another chat, return to view.
+      if (current !== thread_id) {
+        setCurrent(current);
+      }
+      return chats;
+    },
+    [chats, current]
+  );
+
   return {
     chats,
     currentChat: chats?.find((c) => c.thread_id === current) || null,
     createChat,
     enterChat,
+    removeChat
   };
 }
