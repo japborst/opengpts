@@ -34,10 +34,6 @@ from app.tools import (
 class AgentType(str, Enum):
     GPT_35_TURBO = "GPT 3.5 Turbo"
     GPT_4 = "GPT 4 Turbo"
-    AZURE_OPENAI = "GPT 4 (Azure OpenAI)"
-    CLAUDE2 = "Claude 2"
-    BEDROCK_CLAUDE2 = "Claude 2 (Amazon Bedrock)"
-    GEMINI = "GEMINI"
 
 
 DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant."
@@ -59,26 +55,6 @@ def get_agent_executor(
     elif agent == AgentType.GPT_4:
         llm = get_openai_llm(gpt_4=True)
         return get_openai_agent_executor(
-            tools, llm, system_message, interrupt_before_action, CHECKPOINTER
-        )
-    elif agent == AgentType.AZURE_OPENAI:
-        llm = get_openai_llm(azure=True)
-        return get_openai_agent_executor(
-            tools, llm, system_message, interrupt_before_action, CHECKPOINTER
-        )
-    elif agent == AgentType.CLAUDE2:
-        llm = get_anthropic_llm()
-        return get_xml_agent_executor(
-            tools, llm, system_message, interrupt_before_action, CHECKPOINTER
-        )
-    elif agent == AgentType.BEDROCK_CLAUDE2:
-        llm = get_anthropic_llm(bedrock=True)
-        return get_xml_agent_executor(
-            tools, llm, system_message, interrupt_before_action, CHECKPOINTER
-        )
-    elif agent == AgentType.GEMINI:
-        llm = get_google_llm()
-        return get_google_agent_executor(
             tools, llm, system_message, interrupt_before_action, CHECKPOINTER
         )
     else:
@@ -140,11 +116,6 @@ class ConfigurableAgent(RunnableBinding):
 class LLMType(str, Enum):
     GPT_35_TURBO = "GPT 3.5 Turbo"
     GPT_4 = "GPT 4 Turbo"
-    AZURE_OPENAI = "GPT 4 (Azure OpenAI)"
-    CLAUDE2 = "Claude 2"
-    BEDROCK_CLAUDE2 = "Claude 2 (Amazon Bedrock)"
-    GEMINI = "GEMINI"
-    MIXTRAL = "Mixtral"
 
 
 def get_chatbot(
@@ -155,16 +126,6 @@ def get_chatbot(
         llm = get_openai_llm()
     elif llm_type == LLMType.GPT_4:
         llm = get_openai_llm(gpt_4=True)
-    elif llm_type == LLMType.AZURE_OPENAI:
-        llm = get_openai_llm(azure=True)
-    elif llm_type == LLMType.CLAUDE2:
-        llm = get_anthropic_llm()
-    elif llm_type == LLMType.BEDROCK_CLAUDE2:
-        llm = get_anthropic_llm(bedrock=True)
-    elif llm_type == LLMType.GEMINI:
-        llm = get_google_llm()
-    elif llm_type == LLMType.MIXTRAL:
-        llm = get_mixtral_fireworks()
     else:
         raise ValueError("Unexpected llm type")
     return get_chatbot_executor(llm, system_message, CHECKPOINTER)
@@ -228,16 +189,6 @@ class ConfigurableRetrieval(RunnableBinding):
             llm = get_openai_llm()
         elif llm_type == LLMType.GPT_4:
             llm = get_openai_llm(gpt_4=True)
-        elif llm_type == LLMType.AZURE_OPENAI:
-            llm = get_openai_llm(azure=True)
-        elif llm_type == LLMType.CLAUDE2:
-            llm = get_anthropic_llm()
-        elif llm_type == LLMType.BEDROCK_CLAUDE2:
-            llm = get_anthropic_llm(bedrock=True)
-        elif llm_type == LLMType.GEMINI:
-            llm = get_google_llm()
-        elif llm_type == LLMType.MIXTRAL:
-            llm = get_mixtral_fireworks()
         else:
             raise ValueError("Unexpected llm type")
         chatbot = get_retrieval_executor(llm, retriever, system_message, CHECKPOINTER)

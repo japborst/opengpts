@@ -143,32 +143,16 @@ def _get_connery_actions():
 
 
 class AvailableTools(str, Enum):
-    ACTION_SERVER = "Action Server by Robocorp"
     CONNERY = '"AI Action Runner" by Connery'
     DDG_SEARCH = "DDG Search"
-    TAVILY = "Search (Tavily)"
-    TAVILY_ANSWER = "Search (short answer, Tavily)"
     RETRIEVAL = "Retrieval"
-    ARXIV = "Arxiv"
-    YOU_SEARCH = "You.com Search"
-    SEC_FILINGS = "SEC Filings (Kay.ai)"
-    PRESS_RELEASES = "Press Releases (Kay.ai)"
-    PUBMED = "PubMed"
     WIKIPEDIA = "Wikipedia"
 
 
 TOOLS = {
-    AvailableTools.ACTION_SERVER: _get_action_server,
     AvailableTools.CONNERY: _get_connery_actions,
     AvailableTools.DDG_SEARCH: _get_duck_duck_go,
-    AvailableTools.ARXIV: _get_arxiv,
-    AvailableTools.YOU_SEARCH: _get_you_search,
-    AvailableTools.SEC_FILINGS: _get_sec_filings,
-    AvailableTools.PRESS_RELEASES: _get_press_releases,
-    AvailableTools.PUBMED: _get_pubmed,
-    AvailableTools.TAVILY: _get_tavily,
     AvailableTools.WIKIPEDIA: _get_wikipedia,
-    AvailableTools.TAVILY_ANSWER: _get_tavily_answer,
 }
 
 TOOL_OPTIONS = {e.value: e.value for e in AvailableTools}
