@@ -82,3 +82,8 @@ def upsert_assistant(
         config=payload.config,
         public=payload.public,
     )
+
+
+@router.delete("/{aid}")
+def delete_assistant_endpoint(opengpts_user_id: OpengptsUserId, aid: AssistantID):
+    return storage.delete_assistant(opengpts_user_id, aid)

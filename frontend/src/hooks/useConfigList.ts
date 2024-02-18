@@ -26,6 +26,7 @@ export interface ConfigListProps {
     isPublic: boolean
   ) => Promise<void>;
   enterConfig: (id: string | null) => void;
+  removeConfig: (id: string) => void;
 }
 
 function configsReducer(
@@ -109,9 +110,9 @@ export function useConfigList(): ConfigListProps {
         }).then((r) => r.json()),
         files.length
           ? fetch(`/ingest`, {
-              method: "POST",
-              body: formData,
-            })
+            method: "POST",
+            body: formData,
+          })
           : Promise.resolve(),
       ]);
       setConfigs({ ...saved, mine: true });
@@ -120,10 +121,26 @@ export function useConfigList(): ConfigListProps {
     [enterConfig]
   );
 
+  const removeConfig = useCallback(
+    async (assistant_id: string) => {
+      await fetch(`/assistants/${assistant_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }).then((r) => r.json());
+      const newConfigs = configs.filter((c) => c.assistant_id !== assistant_id)
+      setConfigs(newConfigs)
+    },
+    [configs]
+  );
+
   return {
     configs,
     currentConfig: configs?.find((c) => c.assistant_id === current) || null,
     saveConfig,
     enterConfig,
+    removeConfig
   };
 }

@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { TYPES } from "../constants";
 import { Config, ConfigListProps } from "../hooks/useConfigList";
 import { cn } from "../utils/cn";
@@ -6,6 +7,7 @@ function ConfigItem(props: {
   config: Config;
   currentConfig: ConfigListProps["currentConfig"];
   enterConfig: ConfigListProps["enterConfig"];
+  removeConfig: ConfigListProps["removeConfig"];
 }) {
   return (
     <li key={props.config.assistant_id}>
@@ -41,6 +43,9 @@ function ConfigItem(props: {
             }
           </span>
         </div>
+        <TrashIcon
+          className="hidden group-hover:block bg-red-100 text-red-800 hover:bg-red-200 hover:text-red-900 text-xs font-bold py-1 px-2 h-5 rounded-lg shadow-sm"
+          onClick={() => props.removeConfig(props.config.assistant_id)} />
       </div>
     </li>
   );
@@ -50,6 +55,7 @@ export function ConfigList(props: {
   configs: ConfigListProps["configs"];
   currentConfig: ConfigListProps["currentConfig"];
   enterConfig: ConfigListProps["enterConfig"];
+  removeConfig: ConfigListProps["removeConfig"];
 }) {
   return (
     <>
@@ -65,6 +71,7 @@ export function ConfigList(props: {
               config={assistant}
               currentConfig={props.currentConfig}
               enterConfig={props.enterConfig}
+              removeConfig={props.removeConfig}
             />
           )) ?? (
           <li className="leading-6 p-2 animate-pulse font-black text-gray-400 text-lg">
@@ -85,6 +92,7 @@ export function ConfigList(props: {
               config={assistant}
               currentConfig={props.currentConfig}
               enterConfig={props.enterConfig}
+              removeConfig={props.removeConfig}
             />
           )) ?? (
           <li className="leading-6 p-2 animate-pulse font-black text-gray-400 text-lg">
